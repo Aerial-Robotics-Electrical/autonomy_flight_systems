@@ -49,7 +49,7 @@ print(" Is Armable?: %s" % vehicle.is_armable)
 print(" System status: %s" % vehicle.system_status.state)
 print(" Mode: %s" % vehicle.mode.name)
 
-
+arm_and_takeoff(20)
 
 
 # Close vehicle object before exiting script
