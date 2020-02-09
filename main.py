@@ -1,4 +1,7 @@
 import dronekit_sitl, dronekit, time
+from route import Route
+
+WAPOINT_FILE_PATH = 'waypoints.json'
 
 def arm_and_takeoff(aTargetAltitude):
     print("Basic pre-arm checks")
@@ -35,6 +38,8 @@ def arm_and_takeoff(aTargetAltitude):
 print("Start simulator (SITL)")
 sitl = dronekit_sitl.start_default()
 connection_string = sitl.connection_string()
+
+route = Route(WAPOINT_FILE_PATH)
 
 # Connect to the Vehicle.
 print("Connecting to vehicle on: %s" % (connection_string,))
