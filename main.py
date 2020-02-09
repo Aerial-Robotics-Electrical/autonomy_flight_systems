@@ -1,5 +1,6 @@
 import dronekit_sitl, dronekit, time
 from route import Route
+from connection import connection
 
 WAPOINT_FILE_PATH = 'waypoints.json'
 
