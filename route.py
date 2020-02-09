@@ -10,7 +10,7 @@ class Route:
 
 if __name__ == "__main__":
     route = Route(waypoint_list_path='waypoints.json')
-    for waypoint in new_nav.waypoints["points"]:
+    for waypoint in route.waypoints["points"]:
         print(waypoint)
-    for i, waypoint in enumerate(new_nav.waypoints["points"]):
+    for i, waypoint in enumerate(route.waypoints["points"]):
         print(i, waypoint)
