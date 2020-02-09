@@ -10,7 +10,7 @@ def arm_and_takeoff(aTargetAltitude):
 
     print("Arming motors")
     # Copter should arm in GUIDED mode
-    vehicle.mode = VehicleMode("GUIDED")
+    vehicle.mode = dronekit.VehicleMode("GUIDED")
     vehicle.armed = True
 
     # Confirm vehicle armed before attempting to take off
