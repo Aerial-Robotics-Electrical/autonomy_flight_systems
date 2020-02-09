@@ -51,7 +51,6 @@ print(" Mode: %s" % vehicle.mode.name)
 
 arm_and_takeoff(20)
 
-
 # Close vehicle object before exiting script
 vehicle.close()
 
