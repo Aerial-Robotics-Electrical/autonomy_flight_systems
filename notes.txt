@@ -1,0 +1,24 @@
+def planeStartup(lat=None, lon=None):
+    '''start a SITL session using sensible defaults.  This should be the simplest way to start a sitl session'''
+    print("Starting Plane simulator (SITL)")
+    args = {}
+    binary = os.getenv("SITL_BINARY")
+    do_download = True
+    if binary is not None:
+        do_download = False
+        args["path"] = binary
+        defaults = os.getenv("SITL_DEFAULTS_FILEPATH")
+        if defaults is not None:
+            args["defaults_filepath"] = defaults
+    sitl = SITL(**args)
+    if do_download:
+        sitl.download('plane', '3.3.0', verbose=True)
+    if ((lat is not None and lon is None) or
+        (lat is None and lon is not None)):
+        print("Supply both lat and lon, or neither")
+        exit(1)
+    sitl_args = ['--model', 'plane', ]
+    if lat is not None:
+        sitl_args.append('--home=%f,%f,584,353' % (lat,lon,))
+    sitl.launch(sitl_args, await_ready=True, restart=True)
+    return sitl
