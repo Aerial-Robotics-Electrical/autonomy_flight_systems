@@ -30,6 +30,10 @@ class PlaneCommand:
             time.sleep(1)
         
         return True
+    
+    def confirm_waypoint(self, target_location, lat, lon):
+        if abs(target_location.lat - lat) < .0003 and abs(target_location.lon - lon) < 0.0003:
+            return True
         
     def takeoff(self, targetAltitude):
         print("Taking off!")

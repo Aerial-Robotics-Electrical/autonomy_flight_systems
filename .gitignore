@@ -1,2 +1,4 @@
 # remove saved changes
 __pycache__/
+
+*.pyc
