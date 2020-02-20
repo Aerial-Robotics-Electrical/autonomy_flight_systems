@@ -1,2 +1,5 @@
 # remove saved changes
 __pycache__/
+
+# Ignore settings file
+.vscode/
