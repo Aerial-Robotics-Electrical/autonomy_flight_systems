@@ -1,3 +1,5 @@
+import time
+
 def changeRouteList(routeList, chopPoint, newList):
     # This method takes an input of a routes, chops it off at a specified point,
     # and inserts a new route after that point
@@ -34,8 +36,14 @@ rL = [(1,2,3,4),(5,4,6,7),(6,7,8,3),(3,7,4,9),(2,5,1,7)]
 cP = (6,7,8,3)
 nL = [(3,3,3,3),(4,4,4,4),(5,5,5,5)]
 
+start_time = time.time()
 changeList = changeRouteList(rL,cP,nL)
+end_time = time.time()
 print(changeList)
+print(end_time - start_time, ' secs')
+start_time = time.time()
 changeRoute = changeRouteRevised(rL, cP, nL)
+end_time = time.time()
 print(changeRoute)
+print(end_time - start_time, ' secs')
 print(changeList == changeRoute)
