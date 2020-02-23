@@ -16,9 +16,16 @@ def changeRouteList(routeList, chopPoint, newList):
     return (routeList)
 
 def changeRouteRevised(route, targetWaypoint, newRoute):
+    # performs the check to see if the waypoint is on the route
     if targetWaypoint in route:
+        # Find the index
         targetIndex = route.index(targetWaypoint)
+        # Slice the route
         changeRoute = route[0:targetIndex]
+        # Return the list by appending the 2 together.
+        # This is the fastest way to append 2 lists. We also
+        # don't want to create a variable, as this takes memory
+        # to save the variable.
         return (changeRoute + newRoute)
     else:
         return False
