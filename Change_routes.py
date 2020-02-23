@@ -6,6 +6,7 @@ def changeRouteList(routeList, chopPoint, newList):
     
     # In this configuration, we must loop through every waypoint to find the one
     # that we want. This can take N + 1 number of tries, with every interation having to perform
+    # the equality check.
     for waypoint in routeList:
         if (waypoint == chopPoint):
             routeList = routeList[0:routeList.index(waypoint)]   #Chop routelist off at chopping point
@@ -23,12 +24,12 @@ def changeRouteRevised(route, targetWaypoint, newRoute):
         # Find the index
         targetIndex = route.index(targetWaypoint)
         # Slice the route
-        changeRoute = route[0:targetIndex]
+        oldRoute = route[0:targetIndex]
         # Return the list by appending the 2 together.
         # This is the fastest way to append 2 lists. We also
         # don't want to create a variable, as this takes memory
         # to save the variable.
-        return (changeRoute + newRoute)
+        return (oldRoute + newRoute)
     else:
         return False
 
@@ -40,10 +41,10 @@ start_time = time.time()
 changeList = changeRouteList(rL,cP,nL)
 end_time = time.time()
 print(changeList)
-print(end_time - start_time, ' secs')
+print("Time: {time} secs".format(time=(end_time - start_time)))
 start_time = time.time()
 changeRoute = changeRouteRevised(rL, cP, nL)
 end_time = time.time()
 print(changeRoute)
-print(end_time - start_time, ' secs')
+print("Time: {time} secs".format(time=(end_time - start_time)))
 print(changeList == changeRoute)
