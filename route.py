@@ -40,6 +40,26 @@ class Route:
                 waypointOne[2] + stepNumber * ((waypointTwo[2] - waypointOne[2]) / float(breakAmount))])
 
         return waypointList
+    
+    def changeRouteList(self, routeList, chopPoint, newList):
+        """
+        This method will take in a list, chopping tuple, and a new list. It will chop the original list at the specified
+        chopping point and input the new list tuples after that point. It will finally return this newly created list.
+
+        Expected input: routeList (list) - a list that needs to be changed containing tuples containing GPS coordinates [latitude, longitude, altitude]
+            chopPoint (tuple) - a tuple containing the desired chopping GPS coordinates [latitude, longitude, altitude]
+            newList (list) - a new list that will replace tuples following chopPoint containing tuples containing GPS coordinates [latitude, longitude, altitude]
+
+        Expected output: returns a list containing all the new waypoints in order of occurance along the line between the two points
+        """
+    
+        for route in routeList:
+            if (route == chopPoint):
+                routeList = routeList[0:routeList.index(route)]   #Chop routelist off at chopping point
+                for newCoordinate in newList:
+                    routeList.append(newCoordinate)   #Add new route to end of list
+                break
+        return (routeList)
 
 if __name__ == "__main__":
     route = Route('waypoints.json')
