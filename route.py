@@ -1,5 +1,5 @@
 import json
-from dronekit import LocationGlobal
+from dronekit import LocationGlobalRelative
 class Route:
     """
     This class contains the methods and data used for routing the aircraft
@@ -19,7 +19,7 @@ class Route:
 
         Expected output: No output (sets the current destination to the provided coordinate)
         """
-        self.currentDest = LocationGlobal(coordinate[0], coordinate[1], coordinate[2])
+        self.currentDest = LocationGlobalRelative(coordinate[0], coordinate[1], coordinate[2])
         plane.vehicle.simple_goto(self.currentDest)
 
     def breakWaypoints(self, waypointOne, waypointTwo, breakAmount = 10):
