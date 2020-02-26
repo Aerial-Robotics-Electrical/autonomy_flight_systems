@@ -6,3 +6,6 @@ vscode/
 
 # Ignore python execution files
 *.pyc
+
+#Ignore settings files
+settings.json

@@ -1,5 +1,5 @@
 import dronekit_sitl, dronekit, time
-from dronekit import LocationGlobal
+from dronekit import LocationGlobalRelative
 from route import Route
 from connection import PlaneCommand
 from map_route import MapRoute
@@ -56,7 +56,7 @@ while True:
         break
     time.sleep(.5)
 
-target_location = LocationGlobal(TARGET_LATITUDE, TARGET_LONGITUDE , TARGET_ALTITUDE)
+target_location = LocationGlobalRelative(TARGET_LATITUDE, TARGET_LONGITUDE , TARGET_ALTITUDE)
 plane.vehicle.simple_goto(target_location)
 
 flight_data = {'latitude': [], 'longitude': []}
