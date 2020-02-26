@@ -56,7 +56,9 @@ while True:
         break
     time.sleep(.5)
 
-route.feedWaypoint(plane, [TARGET_LATITUDE, TARGET_LONGITUDE, TARGET_ALTITUDE])
+target_location = route.generateWaypoint(plane, [TARGET_LATITUDE, TARGET_LONGITUDE, TARGET_ALTITUDE])
+plane.vehicle.simple_goto(route.currentDest)
+# or plane.vehicle.simple_goto(target_location) if you want to save the waypoint locally in main.py
 
 flight_data = {'latitude': [], 'longitude': []}
 
