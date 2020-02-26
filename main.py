@@ -1,11 +1,11 @@
 import dronekit_sitl, dronekit, time
-from dronekit import LocationGlobal
+from dronekit import LocationGlobalRelative
 from route import Route
 from connection import PlaneCommand
 from map_route import MapRoute
 
 WAPOINT_FILE_PATH = 'waypoints.json'
-MAP_PATH = '/Users/tyler/Desktop/lafayette_map_2.png'
+MAP_PATH = 'resources/lafayette_map_2.png'
 TARGET_ALTITUDE = 30
 TARGET_LATITUDE = 40.373434
 TARGET_LONGITUDE = -86.866277
@@ -72,6 +72,7 @@ while target_reached == False:
     flight_data['longitude'].append(current_location.lon)
     #Break and return from function just below target altitude.
     if plane.confirm_waypoint(route.currentDest, current_location.lat, current_location.lon):
+
         print("Reached target")
         end_time = time.time()
         target_reached = True
