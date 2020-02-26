@@ -8,7 +8,7 @@ class Route:
     """
     def __init__(self, waypoint_list_path):
         self.data = json.load(open(waypoint_list_path, 'rb'))
-        self.currentDest = None
+        self.currentDest = None #This will contain a LocationGlobalRelative object for the current destination
 
     def generateWaypoint(self, plane, coordinate):
         """
