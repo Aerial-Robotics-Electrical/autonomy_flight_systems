@@ -5,7 +5,7 @@ from connection import PlaneCommand
 from map_route import MapRoute
 
 WAPOINT_FILE_PATH = 'waypoints.json'
-MAP_PATH = 'lafayette_map_2.png'
+MAP_PATH = 'resources/lafayette_map_2.png'
 TARGET_ALTITUDE = 30
 TARGET_LATITUDE = 40.373434
 TARGET_LONGITUDE = -86.866277
