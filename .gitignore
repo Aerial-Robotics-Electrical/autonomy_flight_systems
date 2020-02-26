@@ -2,10 +2,7 @@
 __pycache__/
 
 # Ignore settings file
-vscode/
+.vscode/
 
 # Ignore python execution files
 *.pyc
-
-#Ignore settings files
-settings.json
