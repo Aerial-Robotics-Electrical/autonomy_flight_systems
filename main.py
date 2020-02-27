@@ -56,8 +56,9 @@ while True:
         break
     time.sleep(.5)
 
-target_location = LocationGlobalRelative(TARGET_LATITUDE, TARGET_LONGITUDE , TARGET_ALTITUDE)
-plane.vehicle.simple_goto(target_location)
+target_location = route.generateWaypoint(plane, [TARGET_LATITUDE, TARGET_LONGITUDE, TARGET_ALTITUDE])
+plane.vehicle.simple_goto(route.currentDest)
+# or plane.vehicle.simple_goto(target_location) if you want to save the waypoint locally in main.py
 
 flight_data = {'latitude': [], 'longitude': []}
 
@@ -70,7 +71,8 @@ while target_reached == False:
     flight_data['latitude'].append(current_location.lat)
     flight_data['longitude'].append(current_location.lon)
     #Break and return from function just below target altitude.
-    if plane.confirm_waypoint(target_location, current_location.lat, current_location.lon):
+    if plane.confirm_waypoint(route.currentDest, current_location.lat, current_location.lon):
+
         print("Reached target")
         end_time = time.time()
         target_reached = True

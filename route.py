@@ -1,5 +1,5 @@
 import json
-
+from dronekit import LocationGlobalRelative
 class Route:
     """
     This class contains the methods and data used for routing the aircraft
@@ -8,6 +8,19 @@ class Route:
     """
     def __init__(self, waypoint_list_path):
         self.data = json.load(open(waypoint_list_path, 'rb'))
+        self.currentDest = None #This will contain a LocationGlobalRelative object for the current destination
+
+    def generateWaypoint(self, plane, coordinate):
+        """
+        This will take in GPS coordinates and feed it to the drone.
+
+        Expected input: plane (connection.py Object) - object containing the Dronekit vehicle. Used to feed the destination to the drone
+            coordinate (tuple) - a tuple containing the desired ending GPS coordinates [latitude, longitude, altitude]
+
+        Expected output: No output (sets the current destination to the provided coordinate)
+        """
+        self.currentDest = LocationGlobalRelative(coordinate[0], coordinate[1], coordinate[2])
+        return self.currentDest
 
     def breakWaypoints(self, waypointOne, waypointTwo, breakAmount = 10):
         """
