@@ -1,7 +1,7 @@
 import dronekit_sitl, dronekit, time
 from dronekit import LocationGlobalRelative
 from route import Route
-from connection import PlaneCommand
+from plane_commands import PlaneCommand
 from map_route import MapRoute
 
 WAPOINT_FILE_PATH = 'waypoints.json'
@@ -9,6 +9,7 @@ MAP_PATH = 'resources/lafayette_map_2.png'
 TARGET_ALTITUDE = 30
 TARGET_LATITUDE = 40.373434
 TARGET_LONGITUDE = -86.866277
+CONNECTION_STRING = '127.0.0.1:5670'
 
 def printStateData(vehicle):
     print("Get some vehicle attribute values:")
@@ -19,17 +20,14 @@ def printStateData(vehicle):
     print(" System status: %s" % vehicle.system_status.state)
     print(" Mode: %s" % vehicle.mode.name)
         
-# Starting the flight simulator
-print("Start simulator (SITL)")
-# sitl.launch([])
-sitl = dronekit_sitl.start_default(40.371338, -86.863988)
-connection_string = sitl.connection_string()
+# Start the dronekit-sitl plane simulator utilizing the following command:
+# dronekit-sitl ./../ardupilot/build/sitl/bin/arduplane --home=lat,lon,altitude,heading(yaw) --model=plane 
 
 route = Route(WAPOINT_FILE_PATH)
 
 # Connect to the Vehicle.
-print("Connecting to vehicle on: %s" % (connection_string,))
-vehicleConnection = dronekit.connect(connection_string, wait_ready=False)
+# print("Connecting to vehicle on: %s" % (connection_string,))
+vehicleConnection = dronekit.connect(CONNECTION_STRING, wait_ready=False, vehicle_class='plane')
 
 plane = PlaneCommand(vehicleConnection)
 
