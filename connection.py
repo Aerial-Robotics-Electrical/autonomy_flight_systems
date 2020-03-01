@@ -37,4 +37,5 @@ class PlaneCommand:
         
     def takeoff(self, targetAltitude):
         print("Taking off!")
+        self.vehicle.mode = dronekit.VehicleMode("AUTO")
         self.vehicle.simple_takeoff(targetAltitude) # Take off to target altitude
