@@ -52,14 +52,12 @@ class Route:
 
         Expected output: returns a list containing all the new waypoints in order of occurance along the line between the two points
         """
-    
-        for route in routeList:
-            if (route == chopPoint):
-                routeList = routeList[0:routeList.index(route)]   #Chop routelist off at chopping point
-                for newCoordinate in newList:
-                    routeList.append(newCoordinate)   #Add new route to end of list
-                break
-        return (routeList)
+    def changeRouteRevised(route, targetWaypoint, newRoute):
+    # performs the check to see if the waypoint is on the route
+    if targetWaypoint in route:
+        return (route[0:route.index(targetWaypoint)] + newRoute)
+    else:
+        return False
 
 if __name__ == "__main__":
     route = Route('waypoints.json')
