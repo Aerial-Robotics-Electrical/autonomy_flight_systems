@@ -18,18 +18,20 @@ def printStateData(vehicle):
     print(" Is Armable?: %s" % vehicle.is_armable)
     print(" System status: %s" % vehicle.system_status.state)
     print(" Mode: %s" % vehicle.mode.name)
+
+
         
 # Starting the flight simulator
 print("Start simulator (SITL)")
 # sitl.launch([])
-sitl = dronekit_sitl.start_default(40.371338, -86.863988)
-connection_string = sitl.connection_string()
+#sitl = dronekit_sitl.start_default(40.371338, -86.863988)
+#connection_string = sitl.connection_string()
 
 route = Route(WAPOINT_FILE_PATH)
 
 # Connect to the Vehicle.
-print("Connecting to vehicle on: %s" % (connection_string,))
-vehicleConnection = dronekit.connect(connection_string, wait_ready=False)
+# print("Connecting to vehicle on: %s" % (connection_string,))
+vehicleConnection = dronekit.connect('127.0.0.1:5670', wait_ready=False, vehicle_class='plane')
 
 plane = PlaneCommand(vehicleConnection)
 
