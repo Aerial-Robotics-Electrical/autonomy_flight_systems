@@ -27,7 +27,7 @@ route = Route(WAPOINT_FILE_PATH)
 
 # Connect to the Vehicle.
 # print("Connecting to vehicle on: %s" % (connection_string,))
-vehicleConnection = dronekit.connect('127.0.0.1:5670', wait_ready=False, vehicle_class='plane')
+vehicleConnection = dronekit.connect(CONNECTION_STRING, wait_ready=False, vehicle_class='plane')
 
 plane = PlaneCommand(vehicleConnection)
 
