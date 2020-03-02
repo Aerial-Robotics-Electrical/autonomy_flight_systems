@@ -1,5 +1,5 @@
 import dronekit_sitl, dronekit, time
-from dronekit import LocationGlobalRelative, connect
+from dronekit import LocationGlobalRelative, connect, Vehicle
 from route import Route
 from plane_commands import PlaneCommand
 from map_route import MapRoute
@@ -9,7 +9,7 @@ MAP_PATH = 'resources/lafayette_map_2.png'
 TARGET_ALTITUDE = 30
 TARGET_LATITUDE = 40.373434
 TARGET_LONGITUDE = -86.866277
-CONNECTION_STRING = '127.0.0.1:5760'
+CONNECTION_STRING = 'tcp:127.0.0.1:5760'
 
 def printStateData(vehicle):
     print("Get some vehicle attribute values:")
@@ -25,9 +25,12 @@ def printStateData(vehicle):
 
 route = Route(WAPOINT_FILE_PATH)
 
+#sitl = dronekit_sitl.start_default(40.371338, -86.863988)	#sitl = dronekit_sitl.start_default(40.371338, -86.863988)
+#connection_string = sitl.connection_string()
+
 # Connect to the Vehicle.
 print("Connecting to vehicle on: %s" % (CONNECTION_STRING,))
-vehicleConnection = connect('127.0.0.1:5760', wait_ready=True)
+vehicleConnection = connect(CONNECTION_STRING, wait_ready=True)
 
 plane = PlaneCommand(vehicleConnection)
 
