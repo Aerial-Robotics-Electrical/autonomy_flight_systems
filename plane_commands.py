@@ -18,15 +18,12 @@ class PlaneCommand:
             time.sleep(1)
 
         print("Arming motors")
-        # Copter should arm in GUIDED mode
-        self.vehicle.mode = dronekit.VehicleMode("GUIDED")
+        self.vehicle.mode = dronekit.VehicleMode("AUTO")
         self.vehicle.armed = True
         
-        try_number = 0
         # Confirm vehicle armed before attempting to take off
-        while not (self.vehicle.armed or try_number == self.retry_max):
+        while not self.vehicle.armed:
             print(" Waiting for arming...")
-            try_number += 1
             time.sleep(1)
         
         return True
@@ -35,7 +32,14 @@ class PlaneCommand:
         if abs(target_location.lat - lat) < .0003 and abs(target_location.lon - lon) < 0.0003:
             return True
         
-    def takeoff(self, targetAltitude):
+    def takeoff(self):
         print("Taking off!")
         self.vehicle.mode = dronekit.VehicleMode("AUTO")
-        self.vehicle.simple_takeoff(targetAltitude) # Take off to target altitude
+    
+    def load_command_sequence(self, mission):
+        print("Preparing commands to be uploaded")
+        cmds = self.vehicle.commands
+        cmds.clear()
+        for command in mission.command_sequence:
+            cmds.add(command)
+        cmds.upload()   

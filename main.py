@@ -3,6 +3,8 @@ from dronekit import LocationGlobalRelative, connect, Vehicle
 from route import Route
 from plane_commands import PlaneCommand
 from map_route import MapRoute
+from mission import Mission
+import json
 
 WAPOINT_FILE_PATH = 'waypoints.json'
 MAP_PATH = 'resources/lafayette_map_2.png'
@@ -23,11 +25,6 @@ def printStateData(vehicle):
 # Start the dronekit-sitl plane simulator utilizing the following command:
 # dronekit-sitl ./../ardupilot/build/sitl/bin/arduplane --home=lat,lon,altitude,heading(yaw) --model=plane 
 
-route = Route(WAPOINT_FILE_PATH)
-
-#sitl = dronekit_sitl.start_default(40.371338, -86.863988)	#sitl = dronekit_sitl.start_default(40.371338, -86.863988)
-#connection_string = sitl.connection_string()
-
 # Connect to the Vehicle.
 print("Connecting to vehicle on: %s" % (CONNECTION_STRING,))
 vehicleConnection = connect(CONNECTION_STRING, wait_ready=True)
@@ -41,12 +38,26 @@ printStateData(plane.vehicle)
 
 printStateData(plane.vehicle)
 
-if plane.vehicle.armed != True and plane.vehicle.mode.name != 'GUIDED':
+file = open(WAPOINT_FILE_PATH, 'rb')
+waypoint_list = json.loads(file.read())
+
+mission_1 = Mission(waypoint_list["waypoints"], 'infil', takeoff_required=True)
+mission_1.generate_intermediate_waypoints()
+mission_1.add_take_off_command()
+print(mission_1.command_sequence[0])
+mission_1.build_mission_command_sequence()
+
+if plane.vehicle.armed != True and plane.vehicle.mode.name != 'AUTO':
+    plane.load_command_sequence(mission_1)
     plane.arm()
-    plane.takeoff(TARGET_ALTITUDE)
+    time.sleep(0.5)
+    print(plane.vehicle.mode.name)
+    print(plane.vehicle.armed)
+    cmds = plane.vehicle.commands
+    for command in cmds:
+        print(command)
 else:
-    plane.vehicle.mode = dronekit.VehicleMode("GUIDED")
-    plane.takeoff(TARGET_ALTITUDE)
+    exit
 
 while True:
     print(" Altitude: %s" % plane.vehicle.location.global_relative_frame.alt)
@@ -56,10 +67,6 @@ while True:
         print("Reached target altitude")
         break
     time.sleep(.5)
-
-target_location = route.generateWaypoint(plane, [TARGET_LATITUDE, TARGET_LONGITUDE, TARGET_ALTITUDE])
-plane.vehicle.simple_goto(route.currentDest)
-# or plane.vehicle.simple_goto(target_location) if you want to save the waypoint locally in main.py
 
 flight_data = {'latitude': [], 'longitude': []}
 
@@ -84,12 +91,7 @@ minutes = total_time / 60
 seconds = total_time - (minutes * 60)
 print("Total Route Time: {mins}:{secs}".format(mins=round(minutes, 4), secs=round(seconds, 4)))
 
-new_map = MapRoute(MAP_PATH)
-new_map.create_dataframe(flight_data)
-new_map.create_boundary_box()
-new_map.create_and_show_plt
-
-#printStateData(plane.vehicle)
+printStateData(plane.vehicle)
 
 # Close vehicle object before exiting script
 plane.vehicle.close()

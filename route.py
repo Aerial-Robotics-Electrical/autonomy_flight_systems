@@ -1,13 +1,14 @@
 import json
 from dronekit import LocationGlobalRelative
+
 class Route:
     """
     This class contains the methods and data used for routing the aircraft
 
     Expected input: waypoint_list_path - path to the .json file containing a list of waypoints
     """
-    def __init__(self, waypoint_list_path):
-        self.data = json.load(open(waypoint_list_path, 'rb'))
+    def __init__(self):
+        #self.data = json.load(open(waypoint_list_path, 'rb'))
         self.currentDest = None #This will contain a LocationGlobalRelative object for the current destination
 
     def generateWaypoint(self, plane, coordinate):
