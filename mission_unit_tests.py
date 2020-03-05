@@ -17,7 +17,7 @@ class TestMissionMethods(unittest.TestCase):
     def test_take_off_command_added(self):
         first_waypoint = self.mission.initial_waypoint_list[0]
         self.mission.add_take_off_command()
-        self.assertEqual(self.mission.command_sequence[0], Command(0,0,0,      
+        self.assertEqual(self.mission.command_sequence[1], Command(0,0,0,      
                                                             mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT,
                                                             mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,
                                                             0, 0, 0, 0, 0, 0,

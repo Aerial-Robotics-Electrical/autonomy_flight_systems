@@ -12,6 +12,8 @@ from route import Route
 class Mission:
     def __init__(self, waypoint_list, mission_type, connection=None, takeoff_required=False):
         MISSION_TYPES = ['infil', 'exfil', 'waypoint_flight', 'ISR', 'drop', 'avoid']
+        self.mavlink_commands = {"Takeoff": mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,
+                                 "Waypoint": mavutil.mavlink.MAV_CMD_NAV_WAYPOINT}
         self.connection = connection
         self.initial_waypoint_list = waypoint_list
         self.mission_type = mission_type
@@ -41,29 +43,30 @@ class Mission:
         """
         Utilize the first waypoint in the initial waypoint list to allow
         plane to takeoff properly. The first point in the infil route will always
-        be designated as the takeoff route.
+        be designated as the takeoff route. For the command sequence, the first point
+        is always ignored so we add a basic point as the first point. We then repeat that
+        point for takeoff
 
         input: Mission ojbect
 
         output: Boolean flag to assert that the takeoff command is added.
         """
         first_waypoint = self.initial_waypoint_list[0]
-        take_off_command = Command(0,0,0,      
-                                   mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT,
-                                   mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,
-                                   0, 0, 0, 0, 0, 0,
-                                   first_waypoint[0], first_waypoint[1], first_waypoint[2])
-        self.command_sequence.append(take_off_command)
+        self.command_sequence.append(self.create_command(first_waypoint, self.mavlink_commands["Waypoint"]))
+        self.command_sequence.append(self.create_command(first_waypoint, self.mavlink_commands["Takeoff"]))
         return True
     
     def build_mission_command_sequence(self):
         for i, waypoint in enumerate(self.primary_route):
-            if i > 0:
-                self.command_sequence.append(Command(0,0,0,      
-                                             mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT,
-                                             mavutil.mavlink.MAV_CMD_NAV_WAYPOINT,
-                                             0, 0, 0, 0, 0, 0,
-                                             waypoint[0], waypoint[1], waypoint[2]))
+            if i > 1:
+                self.command_sequence.append(self.create_command(waypoint, self.mavlink_commands["Waypoint"]))
+    
+    def create_command(self, waypoint, mav_link_command):
+        return Command(0,0,0,      
+                       mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT,
+                       mav_link_command,
+                       0, 0, 0, 0, 0, 0,
+                       waypoint[0], waypoint[1], waypoint[2])
 
 
 if __name__ == '__main__':
@@ -79,3 +82,4 @@ if __name__ == '__main__':
     print(mission_1.command_sequence[0])
     mission_1.build_mission_command_sequence()
     print(mission_1.command_sequence)
+    print(mission_1.command_sequence[1])
