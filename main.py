@@ -22,6 +22,7 @@ def printStateData(vehicle):
     print(" System status: %s" % vehicle.system_status.state)
     print(" Mode: %s" % vehicle.mode.name)
     print(" Ground Speed: %s" % vehicle.groundspeed)
+    print(" Heading: %s" % vehicle.heading)
         
 # Start the dronekit-sitl plane simulator utilizing the following command:
 # dronekit-sitl ./../ardupilot/build/sitl/bin/arduplane --home=lat,lon,altitude,heading(yaw) --model=plane
@@ -74,7 +75,7 @@ end_time = time.time()
 total_time = end_time - start_time
 minutes = total_time / 60
 seconds = total_time - (minutes * 60)
-print("Total Route Time: {mins}:{secs}".format(mins=round(minutes, 4), secs=round(seconds, 4)))
+print("Total Route Time: {mins} mins {secs} secs".format(mins=round(minutes, 4), secs=round(seconds, 4)))
 
 printStateData(plane.vehicle)
 

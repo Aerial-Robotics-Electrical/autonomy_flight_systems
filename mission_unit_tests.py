@@ -33,6 +33,9 @@ class TestMissionMethods(unittest.TestCase):
                                                             mavutil.mavlink.MAV_CMD_NAV_WAYPOINT,
                                                             0, 0, 0, 0, 0, 0,
                                                             37.443188, -95.582733, 25))
+    
+    def test_the_test(self):
+        self.assertEqual("Mission", self.mission.name)
 
 
 if __name__ == '__main__':
