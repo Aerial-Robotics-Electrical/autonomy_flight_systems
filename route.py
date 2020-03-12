@@ -52,7 +52,7 @@ class Route:
 
         Expected output: returns a list containing all the new waypoints in order of occurance along the line between the two points
         """
-    def changeRouteRevised(route, targetWaypoint, newRoute):
+    def changeRoute(route, targetWaypoint, newRoute):
     # performs the check to see if the waypoint is on the route
     if targetWaypoint in route:
         return (route[0:route.index(targetWaypoint)] + newRoute)
