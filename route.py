@@ -4,10 +4,10 @@ class Route:
     """
     This class contains the methods and data used for routing the aircraft
 
-    Expected input: waypoint_list_path - path to the .json file containing a list of waypoints
+    Expected input: mission_data - path to the .json file containing the mission data
     """
-    def __init__(self, waypoint_list_path):
-        self.data = json.load(open(waypoint_list_path, 'rb'))
+    def __init__(self, mission_data):
+        self.data = json.load(open(mission_data, 'rb'))
         self.currentDest = None #This will contain a LocationGlobalRelative object for the current destination
 
     def generateWaypoint(self, plane, coordinate):
