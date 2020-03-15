@@ -8,23 +8,25 @@ class Route:
     Expected input: mission_data - path to the .json file containing the mission data
     """
     def __init__(self, mission_data):
-        self.data = json.load(open(mission_data, 'rb'))
+        file = json.load(open(mission_data, 'rb'))
         self.currentDest = None #This will contain a LocationGlobalRelative object for the current destination
-        self.waypoints = [] #Contains the provided mission waypoints in the form of [latitude, longitude, altitude]
-        self.boundarypoints = [] #Contains the provided mission boundary points in the form of [latitude, longitude]
-        self.searchGridPoints = [] #Contains the provided search grid points in the form of [latitude, longitude]
+        waypoints = [] 
+        boundarypoints = [] 
+        searchGridPoints = [] 
 
         #Looping through the waypoint dicts to load GPS cords
-        for waypoint in self.data["waypoints"]:
-            self.waypoints += [[waypoint["latitude"], waypoint["longitude"], waypoint["altitude"]]]
+        for waypoint in file["waypoints"]:
+            waypoints += [[waypoint["latitude"], waypoint["longitude"], waypoint["altitude"]]]
         
         #Looping through the flyzone boundary dicts to load proper GPS cords
-        for boundarypoint in self.data["flyZones"][0]["boundaryPoints"]:
-            self.boundarypoints += [[boundarypoint["latitude"], boundarypoint["longitude"]]]
+        for boundarypoint in file["flyZones"][0]["boundaryPoints"]:
+            boundarypoints += [[boundarypoint["latitude"], boundarypoint["longitude"]]]
 
         #Looping through the search grid dict to load GPS coords
-        for searchpoint in self.data["searchGridPoints"]:
-            self.searchGridPoints += [[searchpoint["latitude"], searchpoint["longitude"]]]
+        for searchpoint in file["searchGridPoints"]:
+            searchGridPoints += [[searchpoint["latitude"], searchpoint["longitude"]]]
+
+        self.data = {"waypoints": waypoints, "boundary": boundarypoints, "searchGrid": searchGridPoints} #Contains flight data in a dict with easy access coords
 
     def generateWaypoint(self, plane, coordinate):
         """
@@ -75,6 +77,6 @@ class Route:
 
 if __name__ == "__main__":
     route = Route("interop_example.json")
-    print(route.boundarypoints)
-    print(route.waypoints)
-    print(route.searchGridPoints)
+    print(route.data["boundary"])
+    print(route.data["waypoints"])
+    print(route.data["searchGrid"])
