@@ -41,23 +41,21 @@ class Route:
 
         return waypointList
     
-    def changeRouteList(self, routeList, chopPoint, newList):
+    def changeRoute(self, route, targetWaypoint, newRoute):
         """
-        This method will take in a list, chopping tuple, and a new list. It will chop the original list at the specified
-        chopping point and input the new list tuples after that point. It will finally return this newly created list.
+        This method will take in a list, targetWaypoint (coordiantes), and a new list. It will chop the original list at the specified
+        waypoint and input the new list tuples after that point. It will finally return this newly created list.
 
-        Expected input: routeList (list) - a list that needs to be changed containing tuples containing GPS coordinates [latitude, longitude, altitude]
-            chopPoint (tuple) - a tuple containing the desired chopping GPS coordinates [latitude, longitude, altitude]
-            newList (list) - a new list that will replace tuples following chopPoint containing tuples containing GPS coordinates [latitude, longitude, altitude]
+        Expected input: route (list) - a list that needs to be changed containing tuples containing GPS coordinates [latitude, longitude, altitude]
+            waypoint (tuple) - a tuple containing the desired chopping GPS coordinates [latitude, longitude, altitude]
+            newRoute (list) - a new list that will replace tuples following chopPoint containing tuples containing GPS coordinates [latitude, longitude, altitude]
 
-        Expected output: returns a list containing all the new waypoints in order of occurance along the line between the two points
+        Expected output: returns a list containing all the new waypoints in order of occurance along the line between the two points, or False if the target is not in the route.
         """
-    def changeRouteRevised(route, targetWaypoint, newRoute):
-    # performs the check to see if the waypoint is on the route
-    if targetWaypoint in route:
-        return (route[0:route.index(targetWaypoint)] + newRoute)
-    else:
-        return False
+        if targetWaypoint in route:
+            return (route[0:route.index(targetWaypoint)] + newRoute)
+        else:
+            return False
 
 if __name__ == "__main__":
     route = Route('waypoints.json')
