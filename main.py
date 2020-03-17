@@ -110,15 +110,13 @@ seconds = total_time - (minutes * 60)
 
 print("Total Route Time: {mins} mins {secs} secs".format(mins=round(minutes, 4), secs=round(seconds, 4)))
 
-<<<<<<< HEAD
 #Map the data
 new_map = MapRoute(MAP_PATH)
 new_map.create_dataframe(flight_data)
 new_map.create_boundary_box()
 new_map.create_and_show_plt
-=======
+
 create_flight_data_log(flight_data, FLIGHT_DATA_FILE_NAME)
->>>>>>> Add changes for recording flight data
 printStateData(plane.vehicle)
 
 # Close vehicle object before exiting script
