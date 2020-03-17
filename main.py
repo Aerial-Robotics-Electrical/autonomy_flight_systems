@@ -5,6 +5,7 @@ from plane_commands import PlaneCommand
 from map_route import MapRoute
 from mission import Mission
 import json
+import csv
 
 def printStateData(vehicle):
     print("Get some vehicle attribute values:")
@@ -26,6 +27,7 @@ TARGET_ALTITUDE = 60
 TARGET_LATITUDE = 40.373434
 TARGET_LONGITUDE = -86.866277
 CONNECTION_STRING = 'tcp:127.0.0.1:5760'
+FLIGHT_DATA_FILE_NAME = 'test_flight_03_12_2020'
 
 def printStateData(vehicle):
     print("Get some vehicle attribute values:")
@@ -37,10 +39,19 @@ def printStateData(vehicle):
     print(" Mode: %s" % vehicle.mode.name)
     print(" Ground Speed: %s" % vehicle.groundspeed)
     print(" Heading: %s" % vehicle.heading)
+
+def create_flight_data_log(flight_data, file_name):
+    with open(file_name + '.csv', 'w') as f:
+        for key in flight_data.keys():
+            f.write("%s\t"%(key))
+        f.write("\n")
+        for lat, lon, speed in zip(flight_data['latitude'], flight_data['longitude'], flight_data['ground_speed']):
+            f.write("%s\t%s\t%s"%(lat, lon, speed))
+            f.write("\n")
         
 # Start the dronekit-sitl plane simulator utilizing the following command:
 # dronekit-sitl ./../ardupilot/build/sitl/bin/arduplane --home=lat,lon,altitude,heading(yaw) --model=plane
-# --defaults PATH_TO_DIRECTORY/plane.param
+# --defaults PATH_TO_DIRECTORY/plane.parm
 
 # Connect to the Vehicle.
 print("Connecting to vehicle on: {connect}".format(connect = CONNECTION_STRING))
@@ -59,6 +70,7 @@ printStateData(plane.vehicle)
 file = open(WAPOINT_FILE_PATH, 'rb')
 waypoint_list = json.loads(file.read())
 
+# Generate the take-off mission
 mission_1 = Mission(waypoint_list["waypoints"], 'infil', takeoff_required=True)
 mission_1.generate_intermediate_waypoints()
 mission_1.add_take_off_command()
@@ -98,11 +110,15 @@ seconds = total_time - (minutes * 60)
 
 print("Total Route Time: {mins} mins {secs} secs".format(mins=round(minutes, 4), secs=round(seconds, 4)))
 
+<<<<<<< HEAD
 #Map the data
 new_map = MapRoute(MAP_PATH)
 new_map.create_dataframe(flight_data)
 new_map.create_boundary_box()
 new_map.create_and_show_plt
+=======
+create_flight_data_log(flight_data, FLIGHT_DATA_FILE_NAME)
+>>>>>>> Add changes for recording flight data
 printStateData(plane.vehicle)
 
 # Close vehicle object before exiting script
