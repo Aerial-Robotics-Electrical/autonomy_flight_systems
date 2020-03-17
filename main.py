@@ -15,6 +15,17 @@ def printStateData(vehicle):
     print(" Is Armable?: {arm}".format(arm = vehicle.is_armable))
     print(" System status: {state}".format(state = vehicle.system_status.state))
     print(" Mode: {mode}".format(mode = vehicle.mode.name))
+    print(" Ground Speed: {v}".format(v = vehicle.groundspeed))
+    print(" Heading: {h}".format(h = vehicle.heading))
+
+def create_flight_data_log(flight_data, file_name):
+    with open(file_name + '.csv', 'w') as f:
+        for key in flight_data.keys():
+            f.write("%s\t"%(key))
+        f.write("\n")
+        for lat, lon, speed in zip(flight_data['latitude'], flight_data['longitude'], flight_data['ground_speed']):
+            f.write("%s\t%s\t%s"%(lat, lon, speed))
+            f.write("\n")
         
 """
 Start the dronekit-sitl plane simulator utilizing the following command:
@@ -28,27 +39,7 @@ TARGET_LATITUDE = 40.373434
 TARGET_LONGITUDE = -86.866277
 CONNECTION_STRING = 'tcp:127.0.0.1:5760'
 FLIGHT_DATA_FILE_NAME = 'test_flight_03_12_2020'
-
-def printStateData(vehicle):
-    print("Get some vehicle attribute values:")
-    print(" GPS: %s" % vehicle.gps_0)
-    print(" Battery: %s" % vehicle.battery)
-    print(" Last Heartbeat: %s" % vehicle.last_heartbeat)
-    print(" Is Armable?: %s" % vehicle.is_armable)
-    print(" System status: %s" % vehicle.system_status.state)
-    print(" Mode: %s" % vehicle.mode.name)
-    print(" Ground Speed: %s" % vehicle.groundspeed)
-    print(" Heading: %s" % vehicle.heading)
-
-def create_flight_data_log(flight_data, file_name):
-    with open(file_name + '.csv', 'w') as f:
-        for key in flight_data.keys():
-            f.write("%s\t"%(key))
-        f.write("\n")
-        for lat, lon, speed in zip(flight_data['latitude'], flight_data['longitude'], flight_data['ground_speed']):
-            f.write("%s\t%s\t%s"%(lat, lon, speed))
-            f.write("\n")
-        
+  
 # Start the dronekit-sitl plane simulator utilizing the following command:
 # dronekit-sitl ./../ardupilot/build/sitl/bin/arduplane --home=lat,lon,altitude,heading(yaw) --model=plane
 # --defaults PATH_TO_DIRECTORY/plane.parm
@@ -67,7 +58,7 @@ printStateData(plane.vehicle)
 printStateData(plane.vehicle)
 
 
-file = open(WAPOINT_FILE_PATH, 'rb')
+file = open(WAYPOINT_FILE_PATH, 'rb')
 waypoint_list = json.loads(file.read())
 
 # Generate the take-off mission
