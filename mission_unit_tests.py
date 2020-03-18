@@ -21,21 +21,17 @@ class TestMissionMethods(unittest.TestCase):
                                                             mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT,
                                                             mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,
                                                             0, 0, 0, 0, 0, 0,
-                                                            first_waypoint[0], first_waypoint[1], first_waypoint[2]))
+                                                            first_waypoint["latitude"], first_waypoint["longitude"], first_waypoint["altitude"]))
     
     def test_command_sequence_generation(self):
         self.mission.generate_intermediate_waypoints()
         self.mission.add_take_off_command()
         self.mission.build_mission_command_sequence()
         self.assertEqual(10, len(self.mission.command_sequence))
-        self.assertEqual(self.mission.command_sequence[9], Command(0,0,0,      
-                                                            mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT,
-                                                            mavutil.mavlink.MAV_CMD_NAV_WAYPOINT,
-                                                            0, 0, 0, 0, 0, 0,
-                                                            37.443188, -95.582733, 25))
-    
-    def test_the_test(self):
-        self.assertEqual("Mission", self.mission.name)
+        self.assertEqual(self.mission.command_sequence[9].x, 37.443188)
+        self.assertEqual(self.mission.command_sequence[9].y, -95.5827334)
+        self.assertEqual(self.mission.command_sequence[9].z, 25)
+        self.assertEqual(self.mission.command_sequence[9].command, 16)
 
 
 if __name__ == '__main__':

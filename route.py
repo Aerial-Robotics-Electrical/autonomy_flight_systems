@@ -1,32 +1,40 @@
 import json
 from dronekit import LocationGlobalRelative
 
+
 class Route:
     """
     This class contains the methods and data used for routing the aircraft
 
     Expected input: mission_data - path to the .json file containing the mission data
     """
+
     def __init__(self, mission_data):
         file = json.load(open(mission_data, 'rb'))
-        self.currentDest = None #This will contain a LocationGlobalRelative object for the current destination
-        waypoints = [] 
-        boundarypoints = [] 
-        searchGridPoints = [] 
+        # This will contain a LocationGlobalRelative object for the current destination
+        self.currentDest = None
+        waypoints = []
+        boundarypoints = []
+        searchGridPoints = []
 
-        #Looping through the waypoint dicts to load GPS cords
+        # Looping through the waypoint dicts to load GPS cords
         for waypoint in file["waypoints"]:
-            waypoints += [[waypoint["latitude"], waypoint["longitude"], waypoint["altitude"]]]
-        
-        #Looping through the flyzone boundary dicts to load proper GPS cords
+            waypoints += [[waypoint["latitude"],
+                           waypoint["longitude"], waypoint["altitude"]]]
+
+        # Looping through the flyzone boundary dicts to load proper GPS cords
         for boundarypoint in file["flyZones"][0]["boundaryPoints"]:
-            boundarypoints += [[boundarypoint["latitude"], boundarypoint["longitude"]]]
+            boundarypoints += [[boundarypoint["latitude"],
+                                boundarypoint["longitude"]]]
 
-        #Looping through the search grid dict to load GPS coords
+        # Looping through the search grid dict to load GPS coords
         for searchpoint in file["searchGridPoints"]:
-            searchGridPoints += [[searchpoint["latitude"], searchpoint["longitude"]]]
+            searchGridPoints += [[searchpoint["latitude"],
+                                  searchpoint["longitude"]]]
 
-        self.data = {"waypoints": waypoints, "boundary": boundarypoints, "searchGrid": searchGridPoints} #Contains flight data in a dict with easy access coords
+        # Contains flight data in a dict with easy access coords
+        self.data = {"waypoints": waypoints,
+                     "boundary": boundarypoints, "searchGrid": searchGridPoints}
 
     def generateWaypoint(self, plane, coordinate):
         """
@@ -37,10 +45,11 @@ class Route:
 
         Expected output: Returns a waypoint that can be fed to dronekit (sets the current destination to the provided coordinate)
         """
-        self.currentDest = LocationGlobalRelative(coordinate[0], coordinate[1], coordinate[2])
+        self.currentDest = LocationGlobalRelative(
+            coordinate[0], coordinate[1], coordinate[2])
         return self.currentDest
 
-    def breakWaypoints(self, waypointOne, waypointTwo, breakAmount = 10):
+    def breakWaypoints(self, waypointOne, waypointTwo, breakAmount=10):
         """
         This method will take in two waypoints and break it up into multiple waypoints along a line connecting the
         original two waypoints.
@@ -53,12 +62,15 @@ class Route:
         """
         waypointList = []
         for stepNumber in range(1, breakAmount + 1):
-            waypointList.append([waypointOne[0] + stepNumber * ((waypointTwo[0] - waypointOne[0]) / float(breakAmount)), 
-                waypointOne[1] + stepNumber * ((waypointTwo[1] - waypointOne[1]) / float(breakAmount)), 
-                waypointOne[2] + stepNumber * ((waypointTwo[2] - waypointOne[2]) / float(breakAmount))])
+            waypointList.append({"latitude": self.generateStep(stepNumber, waypointOne["latitude"], waypointTwo["latitude"], breakAmount),
+                                 "longitude": self.generateStep(stepNumber, waypointOne["longitude"], waypointTwo["longitude"], breakAmount),
+                                 "altitude": self.generateStep(stepNumber, waypointOne["altitude"], waypointTwo["latitude"], breakAmount)})
 
         return waypointList
-    
+
+    def generateStep(self, stepNumber, paramPointOne, paramPointTwo, breakAmount):
+        return paramPointOne + round((stepNumber * (paramPointTwo - paramPointOne) / float(breakAmount)), 8)
+
     def changeRoute(self, route, targetWaypoint, newRoute):
         """
         This method will take in a list, targetWaypoint (coordiantes), and a new list. It will chop the original list at the specified
@@ -74,6 +86,7 @@ class Route:
             return (route[0:route.index(targetWaypoint)] + newRoute)
         else:
             return False
+
 
 if __name__ == "__main__":
     route = Route("interop_example.json")

@@ -18,6 +18,7 @@ class PlaneCommand:
             time.sleep(1)
 
         print("Arming motors")
+        # For a plane, the default mode of operations is Auto
         self.vehicle.mode = dronekit.VehicleMode("AUTO")
         self.vehicle.armed = True
         
@@ -29,7 +30,7 @@ class PlaneCommand:
         return True
     
     def confirm_waypoint(self, target_location, lat, lon):
-        if abs(target_location[0] - lat) < .0003 and abs(target_location[1] - lon) < 0.0003:
+        if abs(target_location["latitude"] - lat) < .0003 and abs(target_location["longitude"] - lon) < 0.0003:
             return True
         else:
             return False
