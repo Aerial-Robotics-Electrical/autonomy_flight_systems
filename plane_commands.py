@@ -78,3 +78,26 @@ class PlaneCommand:
                     time.sleep(.5)
                 print("\n Reached waypoint number: {number} \n".format(number= i + 1))
         print("All waypoints reached. Returning to base.")
+    def get_flight_data(self):
+        """"
+        Get flight data for the route, including:
+        *Latitude
+        *Longitude
+        *Altitude
+        *Ground Speed
+        *Heading
+        *Pitch
+        *Roll
+        
+        Store data in a list and return the list so that the system can save 
+        whichever values it needs to
+        """
+        current_location = self.vehicle.location.global_relative_frame
+        flight_data = [current_location.lat,
+                       current_location.lon, 
+                       current_location.alt,
+                       self.vehicle.groundspeed,
+                       self.vehicle.heading,
+                       self.vehicle.attitude.pitch,
+                       self.vehicle.attitude.roll]
+        return(flight_data)
