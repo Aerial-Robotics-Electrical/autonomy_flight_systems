@@ -78,6 +78,7 @@ class PlaneCommand:
                     time.sleep(.5)
                 print("\n Reached waypoint number: {number} \n".format(number= i + 1))
         print("All waypoints reached. Returning to base.")
+
     def get_flight_data(self):
         """"
         Get flight data for the route, including:
