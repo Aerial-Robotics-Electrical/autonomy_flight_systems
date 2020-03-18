@@ -93,12 +93,10 @@ class PlaneCommand:
         Store data in a list and return the list so that the system can save 
         whichever values it needs to
         """
-        current_location = self.vehicle.location.global_relative_frame
-        flight_data = [current_location.lat,
-                       current_location.lon, 
-                       current_location.alt,
-                       self.vehicle.groundspeed,
-                       self.vehicle.heading,
-                       self.vehicle.attitude.pitch,
-                       self.vehicle.attitude.roll]
-        return(flight_data)
+        return [self.vehicle.location.global_relative_frame.lat,
+                self.vehicle.location.global_relative_frame.lon, 
+                self.vehicle.location.global_relative_frame.alt,
+                self.vehicle.groundspeed,
+                self.vehicle.heading,
+                self.vehicle.attitude.pitch,
+                self.vehicle.attitude.roll]
