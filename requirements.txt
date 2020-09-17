@@ -3,3 +3,4 @@ numpy
 dronekit
 dronekit_sitl
 pandas
+pytest
