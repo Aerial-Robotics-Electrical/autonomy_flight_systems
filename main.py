@@ -31,7 +31,7 @@ def create_flight_data_log(flight_data, file_name):
         
 """
 Start the dronekit-sitl plane simulator utilizing the following command:
-    dronekit-sitl ./~/ardupilot/build/sitl/bin/arduplane --home=40.371338,-86.863988,0,0 --model=plane --defaults (path)
+    dronekit-sitl ./PATH_TO_ARDUPILOT/ardupilot/build/sitl/bin/arduplane --home=40.371338,-86.863988,0,0 --model=plane --defaults PATH_TO_THIS_REPO/plan.parm
 """
 
 WAYPOINT_FILE_PATH = 'interop_example.json'
