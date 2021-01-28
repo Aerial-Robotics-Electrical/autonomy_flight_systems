@@ -1,5 +1,6 @@
 import json
-from dronekit import LocationGlobalRelative
+
+from mavsdk.mission import (MissionItem, MissionPlan)
 
 
 class Route:
@@ -45,8 +46,14 @@ class Route:
 
         Expected output: Returns a waypoint that can be fed to dronekit (sets the current destination to the provided coordinate)
         """
-        self.currentDest = LocationGlobalRelative(
-            coordinate[0], coordinate[1], coordinate[2])
+        self.currentDest = MissionItem(coordinate[0], coordinate[1], coordinate[2],
+                                       10,
+                                       True,
+                                       float('nan'),
+                                       float('nan'),
+                                       MissionItem.CameraAction.NONE,
+                                       float('nan'),
+                                       float('nan'))
         return self.currentDest
 
     def breakWaypoints(self, waypointOne, waypointTwo, breakAmount=10):
