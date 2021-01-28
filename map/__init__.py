@@ -2,7 +2,7 @@ import json
 from mavsdk.mission import (MissionItem, MissionPlan)
 
 
-class Route:
+class Map():
     """
     This class contains the methods and data used for routing the aircraft
 

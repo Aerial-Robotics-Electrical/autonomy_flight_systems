@@ -21,7 +21,7 @@ class CompMission:
         self.primary_route = list()
         self.command_sequence = list()
         self.takeoff_required = takeoff_required
-        self.maxium_turn_radius = 30 # Meters
+        self.maxium_turn_radius = 30        # Meters
 
     def generate_intermediate_waypoints(self):
         """
