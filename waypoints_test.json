@@ -1,13 +1,13 @@
 {
     "waypoints": [
         {
-            "latitude": 40.712776,
-            "longitude": -74.005974,
+            "latitude": 40.431193,
+            "longitude": -86.915344,
             "altitude": 20
         },
         {
-            "latitude": 37.443188,
-            "longitude": -95.5827334,
+            "latitude": 40.428243,
+            "longitude": -86.907698,
             "altitude": 25
         }
     ]

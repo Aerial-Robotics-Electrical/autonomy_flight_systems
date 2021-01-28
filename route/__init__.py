@@ -1,5 +1,4 @@
 import json
-
 from mavsdk.mission import (MissionItem, MissionPlan)
 
 

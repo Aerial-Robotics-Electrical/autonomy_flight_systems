@@ -2,27 +2,26 @@
 # for generating and maintaining a mission.
 
 import time
-from dronekit import Command
-from pymavlink import mavutil
 import math
 import uuid
 import json
+
+from mavsdk.mission import (MissionItem, MissionPlan)
 from route import Route
 
 
-class Mission:
+class CompMission:
     def __init__(self, waypoint_list, mission_type, connection=None, takeoff_required=False):
         MISSION_TYPES = ['infil', 'exfil',
                          'waypoint_flight', 'ISR', 'drop', 'avoid']
-        self.mavlink_commands = {"Takeoff": mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,
-                                 "Waypoint": mavutil.mavlink.MAV_CMD_NAV_WAYPOINT}
         self.connection = connection
-        self.initial_waypoint_list = waypoint_list
+        self.initial_waypoint_list = [waypoint for waypoint in waypoint_list["waypoints"]]
         self.mission_type = mission_type
         self.mission_id = uuid.uuid1()
         self.primary_route = list()
         self.command_sequence = list()
         self.takeoff_required = takeoff_required
+        self.maxium_turn_radius = 30 # Meters
 
     def generate_intermediate_waypoints(self):
         """
@@ -33,32 +32,17 @@ class Mission:
 
         Output: Appended list of missions
         """
+        print(len(self.initial_waypoint_list))
         for i, waypoint in enumerate(self.initial_waypoint_list):
             try:
                 intermediate_waypoint_list = self.breakWaypoints(
                     waypoint, self.initial_waypoint_list[i + 1])
-                self.primary_route = self.primary_route + intermediate_waypoint_list
+                transformed_waypoints = []
+                for waypoint in intermediate_waypoint_list:
+                    transformed_waypoints.append(self.create_command(waypoint))
+                self.primary_route = self.primary_route + transformed_waypoints
             except IndexError:
                 pass
-
-    def add_take_off_command(self):
-        """
-        Utilize the first waypoint in the initial waypoint list to allow
-        plane to takeoff properly. The first point in the infil route will always
-        be designated as the takeoff route. For the command sequence, the first point
-        is always ignored so we add a basic point as the first point. We then repeat that
-        point for takeoff
-
-        input: Mission ojbect
-
-        output: Boolean flag to assert that the takeoff command is added.
-        """
-        first_waypoint = self.initial_waypoint_list[0]
-        self.command_sequence.append(self.create_command(
-            first_waypoint, self.mavlink_commands["Waypoint"]))
-        self.command_sequence.append(self.create_command(
-            first_waypoint, self.mavlink_commands["Takeoff"]))
-        return True
 
     def build_mission_command_sequence(self):
         """
@@ -71,10 +55,9 @@ class Mission:
         """
         for i, waypoint in enumerate(self.primary_route):
             if i > 1:
-                self.command_sequence.append(self.create_command(
-                    waypoint, self.mavlink_commands["Waypoint"]))
+                self.command_sequence.append(self.create_command(waypoint))
 
-    def create_command(self, waypoint, mav_link_command):
+    def create_command(self, waypoint):
         """
         Generate a Mavlink command.
 
@@ -83,11 +66,15 @@ class Mission:
         Output: DroneKit command object.
 
         """
-        return Command(0, 0, 0,
-                       mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT,
-                       mav_link_command,
-                       0, 0, 0, 0, 0, 0,
-                       waypoint["latitude"], waypoint["longitude"], waypoint["altitude"])
+        return MissionItem(waypoint["latitude"], waypoint["longitude"], waypoint["altitude"],
+                                       10,
+                                       True,
+                                       float('nan'),
+                                       float('nan'),
+                                       MissionItem.CameraAction.NONE,
+                                       float('nan'),
+                                       float('nan'))
+
 
     def breakWaypoints(self, waypointOne, waypointTwo, breakAmount=10):
         """
@@ -117,12 +104,11 @@ if __name__ == '__main__':
     waypoint_list = json.loads(file.read())
     print(type(waypoint_list))
     print(waypoint_list)
-    mission_1 = Mission(
+    mission_1 = CompMission(
         waypoint_list["waypoints"], mission_type='regular_flight', takeoff_required=True)
     print(mission_1.initial_waypoint_list)
     mission_1.generate_intermediate_waypoints()
     print(mission_1.primary_route)
-    mission_1.add_take_off_command()
     print(mission_1.command_sequence[0])
     mission_1.build_mission_command_sequence()
     print(mission_1.command_sequence)
